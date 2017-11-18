@@ -27,8 +27,74 @@ to:
 _servicemix_directory_/etc
 ```
 
-In this file you need configure what is the devices that is connected in your IoT system and the time (frequency) what you want to collect data
+In this file you need configure what is the devices that is connected in your IoT system and the time (frequency) what you want to collect data.
 
+Syntax of different type of devices (it is important use this to match with enrichment of semantic description):
+```
+Accelerometer
+AirPollutantSensor
+AirThermometer
+AlcoholLevelSensor
+AtmosphericPressureSensor
+BloodPressureSensor
+BoardThermometer
+BodyThermometer
+CholesterolSensor
+CloudCoverSensor
+ConductivitySensor
+DeltaDewPointSensor
+DewPointSensor
+DistanceSensor
+ECG
+ElectricalSensor
+EnergyMeter
+FallDetector
+FrequencySensor
+FuelLevel
+GPSSensor
+GasDetector
+Glucometer
+GyrometerSensor
+GyroscopeSensor
+HeartBeatSensor
+HumiditySensor
+Hydrophone
+ImageSensor
+LeafWetnessSensor
+LightSensor
+Magnetometer
+OccupancyDetector
+Odometer
+PHSensor
+Pedometer
+PrecipitationSensor
+PressureSensor
+ProximitySensor
+PulseOxymeter
+RoadSurfaceThermometer
+SaltMeter
+Seismometer
+ShakeSensor
+SkinConductanceSensor
+SmokeDetector
+SoilHumiditySensor
+SolarRadiationSensor
+SoundSensor
+SpeedSensor
+SunPositionDirectionSensor
+SunPositionElevationSensor
+Thermometer
+ThrottleSensor
+TouchSensor
+UltrasonicSensor
+VehicleCountSensor
+VisibilitySensor
+VoltageSensor
+WeightSensor
+WindChillSensor
+WindDirectionSensor
+WindSpeedSensor
+```
 ## Deploy to Maven Repo
 
 To deploy this repo into our custom maven repo, change pom according to the new version and after that execute the following command. Please ensure that both wiser-mvn-repo and this repo are on the same folder.
