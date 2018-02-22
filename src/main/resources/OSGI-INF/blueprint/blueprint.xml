@@ -28,7 +28,15 @@
 		<property name="strJsonDevices" value="${DevicesConnected}" />
 		<property name="debugModeValue" value="${debugMode}" />
 	</bean>
-
+<!-- 
+	<camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/blueprint">
+		<route>
+			<from uri="timer://myTimer?period={{TimeToVerifyNewDevices}}h" />
+			<to uri="bean:entitiesController?method=lookForNewDevices" />
+		</route>
+	</camelContext>
+	-->
 	<cm:property-placeholder
 		persistent-id="br.ufba.dcc.wiser.soft_iot.gateway.mapping_devices"
 		update-strategy="reload">

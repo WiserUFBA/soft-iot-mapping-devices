@@ -19,8 +19,14 @@ public final class TATUWrapper {
 	
 	public static String topicBase = "dev/";
 	
-	public static String getTATUFlow(String sensorId, int collectSeconds, int publishSeconds){
-		String msgStr = "FLOW " + "INFO " + sensorId + " {collect:" + collectSeconds + ",publish:" + publishSeconds + "}";
+	public static String getTATUFlowInfo(String sensorId, int collectSeconds, int publishSeconds){
+		String msgStr = "FLOW " + "INFO " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
+		
+		return msgStr;
+	}
+	
+	public static String getTATUFlowValue(String sensorId, int collectSeconds, int publishSeconds){
+		String msgStr = "FLOW " + "VALUE " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
 		
 		return msgStr;
 	}
@@ -57,19 +63,22 @@ public final class TATUWrapper {
 	
 	public static List<SensorData> parseTATUAnswerToListSensorData(String answer,Device device, Sensor sensor, Date baseDate){
 		List<SensorData> listSensorData = new ArrayList<SensorData>();
-		
-		JSONObject json = new JSONObject(answer);
-		JSONArray sensorValues = json.getJSONObject("BODY").getJSONArray(
-				sensor.getId());
-		int collectTime = json.getJSONObject("BODY").getJSONObject("FLOW")
-				.getInt("collect");
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(baseDate);
-		for (int i = 0; i < sensorValues.length(); i++) {
-			String value = sensorValues.getString(i);
-			SensorData sensorData = new SensorData(device, sensor,value,calendar.getTime(),calendar.getTime());
-			listSensorData.add(sensorData);
-			calendar.add(Calendar.MILLISECOND, collectTime);
+		try{
+			JSONObject json = new JSONObject(answer);
+			JSONArray sensorValues = json.getJSONObject("BODY").getJSONArray(
+					sensor.getId());
+			int collectTime = json.getJSONObject("BODY").getJSONObject("FLOW")
+					.getInt("collect");
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(baseDate);
+			for (int i = 0; i < sensorValues.length(); i++) {
+				Integer valueInt = sensorValues.getInt(i);
+				String value = valueInt.toString();
+				SensorData sensorData = new SensorData(device, sensor,value,calendar.getTime(),calendar.getTime());
+				listSensorData.add(sensorData);
+				calendar.add(Calendar.MILLISECOND, collectTime);
+			}
+		}catch(org.json.JSONException e){
 		}
 		return listSensorData;
 	}
