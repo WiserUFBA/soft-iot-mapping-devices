@@ -19,6 +19,13 @@ public final class TATUWrapper {
 	
 	public static String topicBase = "/dev/";
 	
+	//{\"method\":\"post\", \"actuator\":\"irrigation_actuator\", \"value\":\"30\"}"
+	public static String getTATUPost(String actuatorId, String value){
+		String msgStr = "{\"method\":\"post\", \"actuator\":\"" + actuatorId + "\", \"value\":\"" + value + "\"}";
+		
+		return msgStr;
+	}
+	
 	public static String getTATUFlowInfo(String sensorId, int collectSeconds, int publishSeconds){
 		//String msgStr = "FLOW " + "INFO " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
 		String msgStr = "{\"method\":\"flow\"," +   "\"sensor\":\"" + sensorId + "\", \"time\":{\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}}";
