@@ -9,7 +9,7 @@
 	<artifactId>soft-iot-mapping-devices</artifactId>
 	<description>Module of SOFT-IoT plataform to map FoT-Devices in FoT-Gateway</description>
 	<groupId>br.ufba.dcc.wiser.soft_iot</groupId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>bundle</packaging>
 
 	<properties>

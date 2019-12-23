@@ -37,13 +37,28 @@ public class ControllerImpl implements Controller{
 				listDevices.add(device);
 				
 				List<Sensor> listSensors = new ArrayList<Sensor>();
-				JSONArray jsonArraySensors = jsonDevice.getJSONArray("sensors");
-				for (int j = 0; j < jsonArraySensors.length(); j++){
-					JSONObject jsonSensor = jsonArraySensors.getJSONObject(j);
-					Sensor sensor = mapper.readValue(jsonSensor.toString(), Sensor.class);
-					listSensors.add(sensor);
+				try{
+					JSONArray jsonArraySensors = jsonDevice.getJSONArray("sensors");
+					for (int j = 0; j < jsonArraySensors.length(); j++){
+						JSONObject jsonSensor = jsonArraySensors.getJSONObject(j);
+						Sensor sensor = mapper.readValue(jsonSensor.toString(), Sensor.class);
+						listSensors.add(sensor);
+					}
+					device.setSensors(listSensors);
+				} catch (Exception e){	
 				}
-				device.setSensors(listSensors);
+				
+				List<Actuator> listActuators = new ArrayList<Actuator>();
+				try {
+					JSONArray jsonArrayActuators = jsonDevice.getJSONArray("actuators");
+					for (int j = 0; j < jsonArrayActuators.length(); j++){
+						JSONObject jsonActuator = jsonArrayActuators.getJSONObject(j);
+						Actuator actuator = mapper.readValue(jsonActuator.toString(), Actuator.class);
+						listActuators.add(actuator);
+					}
+					device.setActuators(listActuators);
+				} catch (Exception e){	
+				}
 			}
 		} catch (JsonParseException e) {
 			System.out.println("Verify the correct format of 'DevicesConnected' property in configuration file."); 

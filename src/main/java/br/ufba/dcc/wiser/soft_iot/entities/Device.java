@@ -13,6 +13,7 @@ public class Device {
 	private double longitude;
 	@JsonIgnoreProperties("device")
 	private List<Sensor> sensors;
+	private List<Actuator> actuators;
 	
 	public Device(){
 		
@@ -49,6 +50,13 @@ public class Device {
 	}
 	public void setSensors(List<Sensor> sensors) {
 		this.sensors = sensors;
+	}
+	
+	public List<Actuator> getActuator() {
+		return actuators;
+	}
+	public void setActuators(List<Actuator> actuators) {
+		this.actuators = actuators;
 	}
 	
 	

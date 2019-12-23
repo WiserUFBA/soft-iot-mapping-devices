@@ -13,30 +13,33 @@ import br.ufba.dcc.wiser.soft_iot.entities.Device;
 import br.ufba.dcc.wiser.soft_iot.entities.Sensor;
 import br.ufba.dcc.wiser.soft_iot.entities.SensorData;
 
-
+//{"method":"flow", "device":"sc01", "sensor":"TemperatureSensor", time:{"collect":10000,"publish":20000}}
 
 public final class TATUWrapper {
 	
-	public static String topicBase = "dev/";
+	public static String topicBase = "/dev/";
 	
 	public static String getTATUFlowInfo(String sensorId, int collectSeconds, int publishSeconds){
-		String msgStr = "FLOW " + "INFO " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
+		//String msgStr = "FLOW " + "INFO " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
+		String msgStr = "{\"method\":\"flow\"," +   "\"sensor\":\"" + sensorId + "\", \"time\":{\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}}";
 		
 		return msgStr;
 	}
 	
 	public static String getTATUFlowValue(String sensorId, int collectSeconds, int publishSeconds){
-		String msgStr = "FLOW " + "VALUE " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
+		String msgStr = "{\"method\":\"flow\"," +   "\"sensor\":\"" + sensorId + "\", \"time\":{\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}}";
+		//String msgStr = "FLOW " + "VALUE " + sensorId + " {\"collect\":" + collectSeconds + ",\"publish\":" + publishSeconds + "}";
 		
 		return msgStr;
 	}
 	
+	//{"code":"post","method":"flow","header":{"sensor":"luminositySensor","device":"sc01","time":{"collect":5000,"publish":10000}},"data":["0","0"]}
 	//{"CODE":"POST","METHOD":"FLOW","HEADER":{"NAME":"ufbaino04"},"BODY":{"temperatureSensor":["36","26"],"FLOW":{"publish":10000,"collect":5000}}}
 	public static boolean isValidTATUAnswer(String answer){
 		try{
 			JSONObject json = new JSONObject(answer);
-			if ((json.get("CODE").toString().contentEquals("POST"))
-					&& json.getJSONObject("BODY") != null) {
+			if ((json.get("code").toString().contentEquals("post"))
+					&& !json.isNull("data")) {
 				return true;
 			}
 		} catch (org.json.JSONException e) {
@@ -46,37 +49,33 @@ public final class TATUWrapper {
 	
 	public static String getDeviceIdByTATUAnswer(String answer){
 		JSONObject json = new JSONObject(answer);
-		String deviceId = json.getJSONObject("HEADER").getString("NAME");
+		String deviceId = json.getJSONObject("header").getString("device");
 		
 		return deviceId;
 	}
 	
 	public static String getSensorIdByTATUAnswer(String answer){
 		JSONObject json = new JSONObject(answer);
-		Iterator<?> keys = json.getJSONObject("BODY").keys();
-		String sensorId = keys.next().toString();
-		while(sensorId.contentEquals("FLOW")){
-			sensorId = keys.next().toString();
-		}
+		String sensorId = json.getJSONObject("header").getString("sensor");
 		return sensorId;
 	}
 	
+	//{"code":"post","method":"flow","header":{"sensor":"luminositySensor","device":"sc01","time":{"collect":5000,"publish":10000}},"data":["0","0"]}
 	public static List<SensorData> parseTATUAnswerToListSensorData(String answer,Device device, Sensor sensor, Date baseDate){
 		List<SensorData> listSensorData = new ArrayList<SensorData>();
 		try{
 			JSONObject json = new JSONObject(answer);
-			JSONArray sensorValues = json.getJSONObject("BODY").getJSONArray(
-					sensor.getId());
-			int collectTime = json.getJSONObject("BODY").getJSONObject("FLOW")
-					.getInt("collect");
+			JSONArray sensorValues = json.getJSONArray("data");
+			int collectTime = json.getJSONObject("header").getJSONObject("time").getInt("collect");
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(baseDate);
 			for (int i = 0; i < sensorValues.length(); i++) {
-				Integer valueInt = sensorValues.getInt(i);
-				String value = valueInt.toString();
-				SensorData sensorData = new SensorData(device, sensor,value,calendar.getTime(),calendar.getTime());
-				listSensorData.add(sensorData);
-				calendar.add(Calendar.MILLISECOND, collectTime);
+				if(!sensorValues.isNull(i)){
+					String value = sensorValues.getString(i);
+					SensorData sensorData = new SensorData(device, sensor,value,calendar.getTime(),calendar.getTime());
+					listSensorData.add(sensorData);
+					calendar.add(Calendar.MILLISECOND, collectTime);
+				}
 			}
 		}catch(org.json.JSONException e){
 		}
