@@ -16,18 +16,18 @@ To install this bundle using our custom maven support execute the following comm
 config:edit org.ops4j.pax.url.mvn 
 config:property-append org.ops4j.pax.url.mvn.repositories ", https://github.com/WiserUFBA/wiser-mvn-repo/raw/master/releases@id=wiser"
 config:update
-bundle:install mvn:br.ufba.dcc.wiser.soft_iot/fot-gateway-mapping-devices/1.0.0
+bundle:install mvn:br.ufba.dcc.wiser.soft_iot/soft-iot-mapping-devices/1.0.0
 ```
-Before install the module do you need copy the configuration file in:
+Before install the module do you need copy the configuration file from src folder here in GitHub:
 ```
-fot-gateway-mapping-devices/src/main/resources/br.ufba.dcc.wiser.soft_iot.gateway.mapping_devices.cfg
+soft-iot-mapping-devices/src/main/resources/br.ufba.dcc.wiser.soft_iot.gateway.mapping_devices.cfg
 ```
-to:
+to your local etc folder of ServiceMix:
 ```
 _servicemix_directory_/etc
 ```
 
-In this file you need configure what is the devices that is connected in your IoT system and the time (frequency) what you want to collect data.
+In this file you need configure what is the devices that is connected in your IoT system and the time (frequency) you want to collect data.
 
 Syntax of different type of devices (it is important use this to match with enrichment of semantic description):
 ```
