@@ -19,6 +19,14 @@ public class Device {
 		
 	}
 	
+	public Actuator getActuatorbyActuatorId(String actuatorId){
+		for(Actuator actuator : actuators){
+			if(actuator.getId().contentEquals(actuatorId))
+				return actuator;
+		}
+		return null;
+	}
+	
 	public Sensor getSensorbySensorId(String sensorId){
 		for(Sensor sensor : sensors){
 			if(sensor.getId().contentEquals(sensorId))
