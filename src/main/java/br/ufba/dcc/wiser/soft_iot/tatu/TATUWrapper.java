@@ -54,6 +54,18 @@ public final class TATUWrapper {
 		return false;
 	}
 	
+	public static boolean isValidTATUActuatorRequest(String answer){
+		try{
+			JSONObject json = new JSONObject(answer);
+			if ((json.get("method").toString().contentEquals("post"))
+					&& !json.isNull("value")) {
+				return true;
+			}
+		} catch (org.json.JSONException e) {
+		}
+		return false;
+	}
+	
 	public static String getDeviceIdByTATUAnswer(String answer){
 		JSONObject json = new JSONObject(answer);
 		String deviceId = json.getJSONObject("header").getString("device");
@@ -65,6 +77,22 @@ public final class TATUWrapper {
 		JSONObject json = new JSONObject(answer);
 		String sensorId = json.getJSONObject("header").getString("sensor");
 		return sensorId;
+	}
+	
+	public static String getActuatorIdByTATURequest(String answer){
+		JSONObject json = new JSONObject(answer);
+		String actuatorId = json.getString("actuator");
+		return actuatorId;
+	}
+	
+	public static String getValueByTATURequest(String answer){
+		JSONObject json = new JSONObject(answer);
+		String value = json.getString("value");
+		return value;
+	}
+	
+	public static String getDeviceIdByTopic(String topic){
+		return topic.split("topicBase")[0];
 	}
 	
 	//{"code":"post","method":"flow","header":{"sensor":"luminositySensor","device":"sc01","time":{"collect":5000,"publish":10000}},"data":["0","0"]}
